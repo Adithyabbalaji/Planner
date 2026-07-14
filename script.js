@@ -1,6 +1,10 @@
 
 const names=["Engagement","Reception","Marriage"];
-let data=JSON.parse(localStorage.getItem("weddingData")||"null");
+let data=JSON.parse(fetch("https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec")
+                    .then(r=>r.json())
+                    .then(data=>{
+                        console.log(data);
+                    });||"null");
 if(!data){
  data=names.map(n=>({name:n,rows:[]}));
 }
