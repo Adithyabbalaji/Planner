@@ -1,0 +1,14 @@
+
+body{font-family:Arial;background:#f4f6fb;margin:20px}
+h1{text-align:center}
+.cards{display:flex;gap:15px;margin:20px 0}
+.card{background:#fff;padding:15px;border-radius:8px;flex:1;box-shadow:0 2px 6px #ccc}
+.event{background:#fff;padding:15px;border-radius:8px;margin:20px 0;box-shadow:0 2px 6px #ccc}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:6px}
+button{padding:6px 10px;margin:5px}
+input,select{width:100%;border:none;background:transparent}
+.booked{background:#d4edda}
+.enquired{background:#fff3cd}
+.pending{background:#f8d7da}
+.cancelled{background:#e2e3e5}
