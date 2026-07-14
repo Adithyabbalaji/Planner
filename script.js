@@ -1,12 +1,12 @@
 
 const names = ["Engagement", "Reception", "Wedding"];
 let data = [];
+const WEB_APP_URL =
+  "https://script.google.com/macros/s/AKfycbw8dEXkuZc5NAAepfp2UxPoYrJ-F4YEgvWd7SnBii7_mPRYe1aG6tzke1w3-hfoQaDDjQ/exec";
 
 async function loadData() {
     try {
-        const response = await fetch(
-            "https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec"
-        );
+        const response = await fetch(WEB_APP_URL);
 
         const sheetData = await response.json();
 
@@ -36,8 +36,6 @@ loadData();
 if(!data){
  data=names.map(n=>({name:n,rows:[]}));
 }
-const WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec";
 
 async function save() {
 
