@@ -1,14 +1,81 @@
 
-const names=["Engagement","Reception","Marriage"];
-let data=JSON.parse(fetch("https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec")
-                    .then(r=>r.json())
-                    .then(data=>{
-                        console.log(data);
-                    });||"null");
+const names = ["Engagement", "Reception", "Wedding"];
+let data = [];
+
+async function loadData() {
+    try {
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec"
+        );
+
+        const sheetData = await response.json();
+
+        console.log(sheetData);
+
+        data = names.map(name => ({
+            name,
+            rows: (sheetData[name] || []).map(r => ({
+                task: r[0] || "",
+                vendor: r[1] || "",
+                budget: Number(r[2]) || 0,
+                quoted: Number(r[3]) || 0,
+                paid: Number(r[4]) || 0,
+                status: r[5] || "Pending",
+                notes: r[6] || ""
+            }))
+        }));
+
+        render();
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+loadData();
 if(!data){
  data=names.map(n=>({name:n,rows:[]}));
 }
-function save(){localStorage.setItem("weddingData",JSON.stringify(data));render();}
+const WEB_APP_URL =
+  "https://script.google.com/macros/s/AKfycbyKlLeDc9YRyeUztumCWEr5XfyyqN0EaW3Yglcpv25uyUTSonIqxajA-O_93tadwgC_zA/exec";
+
+async function save() {
+
+    render();
+
+    try {
+
+        for (const event of data) {
+
+            const rows = event.rows.map(r => [
+                r.task,
+                r.vendor,
+                r.budget,
+                r.quoted,
+                r.paid,
+                r.status,
+                r.notes
+            ]);
+
+            await fetch(WEB_APP_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    event: event.name,
+                    rows: rows
+                })
+            });
+
+        }
+
+        console.log("Saved successfully.");
+
+    } catch (err) {
+        console.error("Save failed", err);
+    }
+}
 function addRow(e){e.rows.push({task:"",vendor:"",budget:0,quoted:0,paid:0,status:"Pending",notes:""});save();}
 function render(){
  const c=document.getElementById("events");c.innerHTML="";
@@ -62,4 +129,4 @@ i.onchange = () => {
  document.getElementById("paid").textContent="₹"+tp;
  document.getElementById("balance").textContent="₹"+(tb-tp);
 }
-render();
+
